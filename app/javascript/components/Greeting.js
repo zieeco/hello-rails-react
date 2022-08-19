@@ -2,8 +2,6 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getGreetingAsync } from '../store/greetingReducer';
-// import PropTypes from "prop-types"
-// import { getGreetingAsync } from "./store/greeting_reducer"
 
 const Greeting = () => {
   const dispatch = useDispatch();

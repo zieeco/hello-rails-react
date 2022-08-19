@@ -1,43 +1,30 @@
-import axios from 'axios';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
-  greet: [],
-  loading: false,
-	error: null
-}
-
-export const getGreetingAsync = () => async (dispatch) => {
-	dispatch({ type: 'FETCH_GREETING_REQUEST' });
-	try {
-		const response = await axios.get('/api/v1/greetings');
-		dispatch({ type: 'FETCH_GREETING_SUCCESS', payload: response.data });
-	} catch (error) {
-		dispatch({ type: 'FETCH_GREETING_FAILURE', payload: response.error });
+export const getGreetingAsync = createAsyncThunk(
+	'fetchGreeting', async () => {
+		const response = await fetch('/api/v1/greetings')
+		const { greeting } = await response.json()
+		return greeting
 	}
-};
+);
 
-const greetingReducer = (state = initialState, action) => {
-	switch (action.type) {
-		case 'FETCH_GREETING_REQUEST':
-			return {
+export const greetingSlice = createSlice({
+	name: 'greetings',
+	initialState: {
+		greet: '',
+		loading: false,
+		error: false
+	},
+	reducers: {},
+	extraReducers: {
+		[getGreetingAsync.fulfilled]: (state, action) => {
+			const newState = {
 				...state,
-				loading: true,
-			};
-		case 'FETCH_GREETING_SUCCESS':
-			return {
-				...state,
-				loading: false,
-				greet: [action.payload],
-			};
-		case 'FETCH_GREETING_FAILURE':
-			return {
-				...state,
-				loading: false,
-				error: action.payload,
-			};
-		default:
-			return state;
+				greet: action.payload,
+			}
+			return newState;
+		}
 	}
-};
+});
 
-export default greetingReducer;
+export default greetingSlice.reducer;
