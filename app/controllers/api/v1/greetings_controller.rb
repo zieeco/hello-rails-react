@@ -1,9 +1,7 @@
 class Api::V1::GreetingsController < ApplicationController
   def index
-    # @greeting = Greeting.all.sample
-    # @greeting = Greeting.all
-    # render json: @greeting.greeting
-    render json: { greeting: @greeting }
+    @greetings = Greeting.all
+    render json:  @greetings
     #   render json: { :greetings => [
     #     {
     #       :name => 'you',
